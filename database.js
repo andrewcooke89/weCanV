@@ -17,6 +17,19 @@ const recipeSchema = new mongoose.Schema({
   comments: [String]
 });
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
+const userSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  email: String,
+  shoppingList: [[String]],
+  favRecipes: [String],
+  curRecipes: [String],
+})
 
-module.exports = Recipe;
+const Recipe = mongoose.model('Recipe', recipeSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = {
+  Recipe,
+  User
+};

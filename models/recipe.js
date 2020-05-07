@@ -1,4 +1,4 @@
-const Recipe = require('../database');
+const { Recipe } = require('../database');
 
 exports.addRecipe = (recipeToAdd) => {
   const recipe = new Recipe(recipeToAdd);
@@ -19,14 +19,16 @@ exports.getRecipes = async () => {
 exports.updateRecipe = (recipeUpdates) => {
 
   return new Promise ((res, rej) => {
+    //find recipe
     const recipe =  Recipe.findOne({name: recipeUpdates.name}, (err, recipe) => {
       if(err) rej(err);
+      // update all properties provided
       for (let key in recipeUpdates){
         if (recipeUpdates.hasOwnProperty(key)) {
           recipe[key] = recipeUpdates[key];
         }
       }
-      // recipe.likes = recipeUpdates.likes;
+      //save changes and resolve promise
       recipe.save();
       console.log('Recipe Updated: ', recipe);
       res(recipe);
