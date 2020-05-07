@@ -1,0 +1,35 @@
+const Recipe = require('../database');
+
+exports.addRecipe = (recipeToAdd) => {
+  const recipe = new Recipe(recipeToAdd);
+  recipe.save((err,recipe) => {
+    if (err) return console.error(err);
+    console.log('recipe saved!', recipe);
+  });
+};
+
+exports.getRecipes = async () => {
+  const recipeList = await Recipe.find((err, recipes)=> {
+    if (err) return console.error(err);
+    console.log('got recipes!', recipes);
+  });
+  return recipeList;
+};
+
+exports.updateRecipe = (recipeUpdates) => {
+
+  return new Promise ((res, rej) => {
+    const recipe =  Recipe.findOne({name: recipeUpdates.name}, (err, recipe) => {
+      if(err) rej(err);
+      for (let key in recipeUpdates){
+        if (recipeUpdates.hasOwnProperty(key)) {
+          recipe[key] = recipeUpdates[key];
+        }
+      }
+      // recipe.likes = recipeUpdates.likes;
+      recipe.save();
+      console.log('Recipe Updated: ', recipe);
+      res(recipe);
+    });
+  })
+}
